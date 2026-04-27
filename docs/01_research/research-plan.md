@@ -51,8 +51,8 @@
 - `docs/01_research/pain-points.md`
 - `docs/01_research/user-interviews.md`
 - `docs/00_project/assumptions.md`
-- `.ai/context.md`
-- `.ai/risk-register.md`
+- `ai/context.md`
+- `ai/risk-register.md`
 
 ## 已知约束
 

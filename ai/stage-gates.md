@@ -56,7 +56,7 @@ Agent 不得跳过阶段门禁。
 - `docs/02_product/user-stories.md`
 - `docs/02_product/acceptance-criteria.md`
 - `docs/02_product/metrics.md`
-- `.ai/specs.md`
+- `ai/specs.md`
 
 ### 不允许进入下一阶段的情况
 
@@ -82,8 +82,8 @@ Agent 不得跳过阶段门禁。
 - `docs/03_design/architecture.md`
 - `docs/03_design/data-model.md`
 - `docs/03_design/api-spec.md`
-- `.ai/decisions.md`
-- `.ai/risk-register.md`
+- `ai/decisions.md`
+- `ai/risk-register.md`
 
 ### 不允许进入下一阶段的情况
 
@@ -108,7 +108,7 @@ Agent 不得跳过阶段门禁。
 - `docs/04_development/implementation-plan.md`
 - `docs/04_development/task-breakdown.md`
 - 测试文件
-- 更新后的 `.ai/specs.md`
+- 更新后的 `ai/specs.md`
 
 ### 不允许进入下一阶段的情况
 

@@ -59,4 +59,4 @@
 ## 后续动作
 
 - 继续补充第一轮访谈对象。
-- 将访谈结论同步到 `docs/00_project/assumptions.md` 与 `.ai/risk-register.md`。
+- 将访谈结论同步到 `docs/00_project/assumptions.md` 与 `ai/risk-register.md`。

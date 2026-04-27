@@ -6,9 +6,9 @@
 
 项目名称：TODO  
 项目一句话描述：TODO  
-当前阶段：需求调研阶段  
+当前阶段：方案设计阶段  
 当前版本：v0.1  
-最后更新：TODO  
+最后更新：2026-04-27  
 
 ## 2. Agent 角色
 
@@ -41,8 +41,8 @@
 6. 发现不确定信息时，标记为 TODO。
 7. 发现文档冲突时，必须指出冲突。
 8. 不得编造业务规则、用户需求、技术结论。
-9. 关键决策必须记录到 `.ai/decisions.md`。
-10. 需求变化必须同步更新 `.ai/specs.md`。
+9. 关键决策必须记录到 `ai/decisions.md`。
+10. 需求变化必须同步更新 `ai/specs.md`。
 
 ## 4. 项目阶段
 
@@ -55,20 +55,20 @@
 5. 测试验证阶段
 6. 质量审计阶段
 
-每个阶段必须遵守 `.ai/workflows.md` 和 `.ai/stage-gates.md`。
+每个阶段必须遵守 `ai/workflows.md` 和 `ai/stage-gates.md`。
 
 ## 5. 必须阅读的文档
 
 在任何任务开始前，Agent 应优先阅读：
 
-- `.ai/AGENTS.md`
-- `.ai/rules.md`
-- `.ai/superpowers.md`
-- `.ai/question-bank.md`
-- `.ai/stage-gates.md`
-- `.ai/specs.md`
-- `.ai/decisions.md`
-- `.ai/workflows.md`
+- `ai/AGENTS.md`
+- `ai/rules.md`
+- `ai/superpowers.md`
+- `ai/question-bank.md`
+- `ai/stage-gates.md`
+- `ai/specs.md`
+- `ai/decisions.md`
+- `ai/workflows.md`
 
 如果某些文档不存在，应先建议创建，而不是假设其内容。
 
@@ -77,11 +77,11 @@
 当文档之间出现冲突时，按以下优先级判断：
 
 1. 用户当前明确指令
-2. `.ai/decisions.md`
-3. `.ai/specs.md`
+2. `ai/decisions.md`
+3. `ai/specs.md`
 4. `docs/02_product/prd.md`
 5. `docs/03_design/architecture.md`
-6. `.ai/rules.md`
+6. `ai/rules.md`
 7. 其他历史文档
 
 如果冲突无法判断，必须停止并说明冲突点。
@@ -109,8 +109,8 @@ Agent 不允许：
 - 保持标题结构稳定
 - 未知内容写 `TODO`
 - 假设内容写入“假设”部分
-- 风险内容写入 `.ai/risk-register.md`
-- 决策内容写入 `.ai/decisions.md`
+- 风险内容写入 `ai/risk-register.md`
+- 决策内容写入 `ai/decisions.md`
 - 不删除历史决策，只能标记为“已替代”或“已废弃”
 - 需求、设计、实现变更后必须同步更新相关文档
 
@@ -120,17 +120,17 @@ Agent 不允许：
 
 1. 说明当前阶段目标
 2. 阅读该阶段相关文档
-3. 基于 `.ai/question-bank.md` 提出关键问题
+3. 基于 `ai/question-bank.md` 提出关键问题
 4. 收集用户回答
 5. 生成该阶段 Markdown 文档
-6. 根据 `.ai/stage-gates.md` 判断是否可以进入下一阶段
+6. 根据 `ai/stage-gates.md` 判断是否可以进入下一阶段
 
 ## 10. 技术开发规则
 
 进入技术开发阶段后，Agent 必须：
 
-1. 先阅读 `.ai/specs.md`
-2. 先阅读 `.ai/decisions.md`
+1. 先阅读 `ai/specs.md`
+2. 先阅读 `ai/decisions.md`
 3. 先阅读相关设计文档
 4. 输出实现计划
 5. 输出测试计划
@@ -172,8 +172,17 @@ Agent 每次处理任务时，尽量按以下格式回复：
 
 ## 模板规则
 
-所有 AI 生成文档必须优先使用 `.ai/templates/` 目录下的对应模板。
+所有 AI 生成文档必须优先使用 `ai/templates/` 目录下的对应模板（如目录存在）。
 
 如果目标文档已有模板，必须严格保持一级、二级标题结构不变。
 
-如果没有对应模板，先使用 `.ai/templates.md` 中的通用模板。
+如果没有对应模板，先使用 `ai/templates.md` 中的通用模板。
+## 12. 提交门禁（人工审核强制）
+
+新增强制规则（最高优先级）：
+
+1. Agent 在任何情况下都不得自动执行 `git commit`、`git push`、`git merge`、`git rebase`。
+2. 所有代码或文档修改完成后，必须先进入“人工审核”状态，等待用户明确批准。
+3. 仅当用户给出明确指令（例如“可以提交”“批准提交”）后，Agent 才可执行提交。
+4. 若用户未明确批准，Agent 只能提供变更说明、diff、验证结果，不得落库提交。
+5. 如与其他规则冲突，以本条“人工审核后提交”规则为准。

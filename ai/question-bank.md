@@ -62,7 +62,7 @@ Agent 不能一次性抛出过多问题。
 - docs/01_research/research-plan.md
 - docs/01_research/pain-points.md
 - docs/00_project/assumptions.md
-- .ai/context.md
+- ai/context.md
 
 ## 进入下一阶段的条件
 
@@ -120,7 +120,7 @@ Agent 不能一次性抛出过多问题。
 - docs/02_product/user-stories.md
 - docs/02_product/acceptance-criteria.md
 - docs/02_product/metrics.md
-- .ai/specs.md
+- ai/specs.md
 
 ## 进入下一阶段的条件
 
@@ -187,8 +187,8 @@ Agent 不能一次性抛出过多问题。
 - docs/03_design/data-model.md
 - docs/03_design/api-spec.md
 - docs/03_design/security-design.md
-- .ai/decisions.md
-- .ai/risk-register.md
+- ai/decisions.md
+- ai/risk-register.md
 
 ## 进入下一阶段的条件
 
@@ -243,8 +243,8 @@ Agent 不能一次性抛出过多问题。
 - docs/04_development/task-breakdown.md
 - docs/04_development/coding-notes.md
 - 测试文件
-- 更新 .ai/specs.md
-- 必要时更新 .ai/decisions.md
+- 更新 ai/specs.md
+- 必要时更新 ai/decisions.md
 
 ## 进入下一阶段的条件
 
