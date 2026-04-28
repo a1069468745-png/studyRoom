@@ -7,8 +7,8 @@
 | 项目 | studyRomm |
 | 阶段 | 方案设计阶段 |
 | 状态 | 草案 |
-| 版本 | v0.1 |
-| 最后更新 | 2026-04-27 |
+| 版本 | v0.2 |
+| 最后更新 | 2026-04-28 |
 | 相关来源 | `ai/specs.md`、`ai/decisions.md`、`ai/risk-register.md`、`docs/02_product/prd.md`、`docs/02_product/acceptance-criteria.md`、用户阶段 3 答复 |
 
 ## 1. 设计目标
@@ -47,6 +47,15 @@
 推荐主栈：
 
 - 后端：Java 21
+- 前端框架：Vue
+- 前端语言：TypeScript
+- 前端构建：Vite
+- 前端路由：Vue Router
+- 前端状态管理：Pinia
+- 前端组件库：Element Plus
+- 前端 HTTP 客户端：Axios
+- 前端图表：ECharts
+- 前端测试：Vitest + Playwright
 - 服务框架：Spring Boot 3
 - 微服务治理：Spring Cloud Alibaba 2023.x
 - 注册与配置：Nacos
@@ -64,6 +73,15 @@
 
 理由：
 
+- Vue：满足项目已确认的前端要求，适合客户端与管理端并行开发。
+- TypeScript：有利于和 API 规格、错误码、任务状态保持契约一致。
+- Vite：适合阶段 4 的前端并行开发和 mock/stub 联调。
+- Vue Router：适合按老师/学生/管理员角色做页面分区与路由守卫。
+- Pinia：足以支撑登录态、任务状态、字典缓存和全局 UI 状态。
+- Element Plus：适合课程树、表格、审核流、规则配置器等中后台高频场景。
+- Axios：适合统一处理鉴权头、错误拦截和任务轮询封装。
+- ECharts：适合考试分析和知识点掌握度图表展示。
+- Vitest + Playwright：覆盖组件/页面逻辑与三角色主链路验证。
 - Java 21：LTS 版本，性能和并发能力成熟，适合长期维护。
 - Spring Boot 3：企业级生态成熟，适合快速搭建独立服务。
 - Spring Cloud Alibaba 2023.x：一次性补齐注册、配置、路由、调用治理和流控能力。
@@ -117,6 +135,13 @@
 
 结论：当前栈满足首版性能要求，但前提是架构上保持“微服务边界清晰 + 异步任务化 + 缓存优先”。
 
+### 2.6 前端落地原则
+
+- 双端统一采用 Vue 技术栈，不额外引入第二套前端框架。
+- 客户端与管理端共享契约层、错误处理、任务状态和权限工具，但页面实现按角色边界分开。
+- 前端自 `DEV-001` 起基于 API 契约、统一错误结构和 mock/stub 并行推进。
+- 真实接口收口在 `DEV-008` 执行，不把前端开发整体后置。
+
 ## 3. 已确认边界
 
 - 首版以中学场景为主。
@@ -133,6 +158,7 @@
 - `docs/03_design/data-model.md`
 - `docs/03_design/api-spec.md`
 - `docs/03_design/security-design.md`
+- `docs/03_design/frontend-architecture.md`
 
 ## 5. 风险与假设
 

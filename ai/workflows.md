@@ -2,7 +2,7 @@
 
 ## 1. 目的
 
-定义本项目 6 个阶段的标准执行步骤，确保与 `ai/AGENTS.md`、`ai/superpowers.md`、`ai/stage-gates.md` 一致。
+定义本项目 6 个阶段的标准执行步骤，确保与 `AGENTS.md`、`ai/superpowers.md`、`ai/stage-gates.md` 一致。
 
 ## 2. 全局规则
 
