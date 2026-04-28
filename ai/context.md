@@ -35,7 +35,7 @@
 - 异步任务首版采用数据库任务表 + 后台 worker，不引入 MQ。
 - 当前阶段 4 的权威规划文档位于 `docs/04_development/`。
 - 当前阶段 4 的统一执行 Prompt 位于 `ai/state04/stage-4-development-execution-prompts.prompt.md`，用于约束每个 `DEV` 的开发准入检查。
-- 当前仓库不存在 `ai/AGENTS.md`，项目执行约束以根目录 `AGENTS.md` 为准。
+- 当前仓库的项目执行约束文件位于根目录 `AGENTS.md`。
 - 当前仓库与会话环境未定义项目级 `agent-teams` 机制，阶段 4 默认采用多个 agent 人工编排协作。
 
 ## 当前阶段结论

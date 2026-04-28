@@ -53,7 +53,7 @@
 请先阅读以下文件：
 
 ```txt
-ai/AGENTS.md
+AGENTS.md
 ai/rules.md
 ai/superpowers.md
 ai/question-bank.md
@@ -243,7 +243,7 @@ docs/03_design/security-design.md
 
 | 文档 | 状态 | 作用 |
 |---|---|---|
-| ai/AGENTS.md | 已读取 / 缺失 | Agent 总规则 |
+| AGENTS.md | 已读取 / 缺失 | 项目根目录的 Agent 总规则 |
 | ai/rules.md | 已读取 / 缺失 | 硬约束 |
 | ai/superpowers.md | 已读取 / 缺失 | 工作方式 |
 | ai/specs.md | 已读取 / 缺失 | 当前实现规格 |

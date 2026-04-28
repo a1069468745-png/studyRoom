@@ -1,5 +1,6 @@
 {
   "name": "@study-room/admin-console",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,8 +9,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@study-room/mock": "workspace:*",
-    "@study-room/shared": "workspace:*"
+    "@study-room/mock": "file:../../packages/mock",
+    "@study-room/shared": "file:../../packages/shared"
   }
 }
-
