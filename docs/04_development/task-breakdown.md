@@ -61,7 +61,7 @@
 
 | ID | 问题 | 类型 | 优先级 | 负责人 | 状态 |
 |---|---|---|---|---|---|
-| TODO-TASK-001 | 明确 DEV-002 首批核心表范围是否按“最小主表集合”收敛 | 技术 | P0 | AI planning agent | 未处理 |
+| TODO-TASK-001 | DEV-002 首批核心表范围已按“最小主表集合”收敛：`auth` 侧为 `user`、`role`、`user_role`、`class_room`、`class_membership`、`teaching_assignment`、`resource_owner_scope`、`audit_log`；`knowledge` 侧为 `textbook_version`、`curriculum_node`、`content_asset`；首批业务主表为 `question`、`question_option`、`question_answer`、`question_analysis`、`question_knowledge`、`question_curriculum_node`、`exam_plan`、`exam_plan_target`、`exam_session`、`exam_submission`、`job_task` | 技术 | P0 | AI planning agent | 已处理 |
 | TODO-TASK-002 | 明确教材/题库/历史真题的授权白名单与禁用边界 | 合规 | P0 | 用户 | 未处理 |
 | TODO-TASK-003 | 明确自动批改分题型准确率目标与人工复核触发条件 | 产品/质量 | P0 | 用户 | 未处理 |
 | TODO-TASK-004 | 明确视频离线缓存是否进入首版及对应加密策略 | 产品/安全 | P1 | 用户 | 未处理 |

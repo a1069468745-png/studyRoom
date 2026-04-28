@@ -1,6 +1,16 @@
 spring:
   application:
     name: auth-service
+  datasource:
+    url: jdbc:h2:mem:auth-service;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  flyway:
+    enabled: true
+    default-schema: auth_service
+    schemas:
+      - auth_service
   mvc:
     throw-exception-if-no-handler-found: true
   web:
