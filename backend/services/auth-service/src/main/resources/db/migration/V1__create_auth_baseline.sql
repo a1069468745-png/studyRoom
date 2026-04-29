@@ -127,7 +127,7 @@ create table if not exists audit_log (
     resource_type varchar(64) not null,
     resource_id varchar(64) not null,
     result_code varchar(32) not null,
-    detail_json clob,
+    detail_json longtext,
     created_at timestamp not null default current_timestamp,
     created_by varchar(64)
 );

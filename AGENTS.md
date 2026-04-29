@@ -61,7 +61,6 @@
 
 在任何任务开始前，Agent 应优先阅读：
 
-- `ai/AGENTS.md`
 - `ai/rules.md`
 - `ai/superpowers.md`
 - `ai/question-bank.md`

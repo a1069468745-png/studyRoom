@@ -2,10 +2,10 @@ spring:
   application:
     name: knowledge-service
   datasource:
-    url: jdbc:h2:mem:knowledge-service;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: ${STUDYROMM_KNOWLEDGE_DB_URL:jdbc:mariadb://localhost:3306/knowledge_service?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ${STUDYROMM_KNOWLEDGE_DB_USERNAME:root}
+    password: ${STUDYROMM_KNOWLEDGE_DB_PASSWORD:123456}
   flyway:
     enabled: true
     default-schema: knowledge_service

@@ -7,8 +7,8 @@
 | 项目 | studyRomm |
 | 阶段 | 跨阶段决策记录（含阶段 4 补充） |
 | 状态 | 生效 |
-| 版本 | v0.2 |
-| 最后更新 | 2026-04-28 |
+| 版本 | v0.3 |
+| 最后更新 | 2026-04-29 |
 | 相关来源 | `ai/stage-gates.md`、`ai/specs.md`、`docs/superpowers/specs/2026-04-27-exam-knowledgebase-design.md`、历史需求确认记录 |
 
 ## 决策状态说明
@@ -85,3 +85,6 @@
 | D-038 | 2026-04-28 | 阶段 4 每个 `DEV` 执行前必须使用统一的门禁式开发 Prompt；若对应阻塞 TODO、阶段收口项、依赖阶段或测试计划未闭合，Agent 只能输出缺口与收口动作，不得进入编码 | P0 | 已决策 | 满足 `AGENTS.md`、`ai/superpowers.md` 和用户对“先完成阻塞 TODO 和收口要求才可进入开发”的要求，并为多 agent 协作提供一致执行口径 |
 | D-039 | 2026-04-28 | 如果当前 `DEV` 不满足开发要求，Agent 必须优先补齐与该阶段直接相关的待办工作项与收口文档；不得仅停留在“等待确认”或“不可开发”的状态 | P0 | 已决策 | 满足用户新增要求，确保阶段 4 在门禁未闭合时优先推进消缺，而不是形成停滞 |
 | D-040 | 2026-04-28 | `DEV-002` 的首批核心表范围收敛为“首批核心主表 + Flyway 基座”：`auth` 侧落 `user`、`role`、`user_role`、`class_room`、`class_membership`、`teaching_assignment`、`resource_owner_scope`、`audit_log`；`knowledge` 侧落 `textbook_version`、`curriculum_node`、`content_asset`；规划并建首批业务主表 `question`、`question_option`、`question_answer`、`question_analysis`、`question_knowledge`、`question_curriculum_node`、`exam_plan`、`exam_plan_target`、`exam_session`、`exam_submission`、`job_task`；其余 `paper_*`、`grading_*`、`analysis_*`、`video_*` 等表后置到对应 DEV | P0 | 已决策 | 满足 `DEV-002` 的最小主表集合要求，控制建库范围，同时为 `DEV-003` 至 `DEV-007` 保留稳定数据边界 |
+| D-041 | 2026-04-29 | `DEV-003` 第一模块的认证基线采用“用户 Bearer 访问令牌 + 服务身份请求头”双通道：用户令牌由 `auth-service` 签发并内含用户与角色摘要，服务间调用使用 `X-Service-Name` + `X-Service-Token` 进行独立身份校验 | P0 | 已决策 | 满足“统一登录认证 + 服务身份独立于前端用户令牌 + 前后端并行可联调”的当前阶段目标，并保持后续替换为更强令牌体系的空间 |
+| D-042 | 2026-04-29 | `DEV-004` 合规口径收口：教材/题库/历史真题仅允许“自研原创、已签约授权、公共领域/明确开放许可、用户自有并授权上传”四类来源入库；明确禁用“未授权抓取、绕过付费/登录限制抓取、去标识再分发受限内容、来源不可追溯内容”；所有内容入库必须记录来源类型、来源标识、授权凭据编号或开放许可链接、采集时间与采集人 | P0 | 已决策 | 关闭 `DEV-004` 准入阻塞项“授权白名单与禁用边界”，并为 R-001/R-005/R-018 提供统一执行依据 |
+| D-043 | 2026-04-29 | 阶段 4 起数据库运行口径统一为 MariaDB（MySQL 协议兼容），开发、联调、测试与迁移验证均不再使用 H2；本机临时可使用 `root/123456`，后续收口需切换为专用应用账号（建议 `studyromm_app`）并最小化权限 | P0 | 已决策 | 用户已明确要求“后续全部按 MySQL 接入形式，不再使用 H2”，并确认当前环境以 MariaDB 为唯一数据库口径 |

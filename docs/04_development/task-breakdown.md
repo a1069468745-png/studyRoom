@@ -7,8 +7,8 @@
 | 项目 | studyRomm |
 | 阶段 | 技术开发阶段 |
 | 状态 | 已确认 |
-| 版本 | v0.3 |
-| 最后更新 | 2026-04-28 |
+| 版本 | v0.4 |
+| 最后更新 | 2026-04-29 |
 | 负责人 | AI planning agent |
 | 相关文档 | docs/04_development/implementation-plan.md |
 
@@ -62,7 +62,7 @@
 | ID | 问题 | 类型 | 优先级 | 负责人 | 状态 |
 |---|---|---|---|---|---|
 | TODO-TASK-001 | DEV-002 首批核心表范围已按“最小主表集合”收敛：`auth` 侧为 `user`、`role`、`user_role`、`class_room`、`class_membership`、`teaching_assignment`、`resource_owner_scope`、`audit_log`；`knowledge` 侧为 `textbook_version`、`curriculum_node`、`content_asset`；首批业务主表为 `question`、`question_option`、`question_answer`、`question_analysis`、`question_knowledge`、`question_curriculum_node`、`exam_plan`、`exam_plan_target`、`exam_session`、`exam_submission`、`job_task` | 技术 | P0 | AI planning agent | 已处理 |
-| TODO-TASK-002 | 明确教材/题库/历史真题的授权白名单与禁用边界 | 合规 | P0 | 用户 | 未处理 |
+| TODO-TASK-002 | 已明确教材/题库/历史真题的授权白名单与禁用边界（依据 D-042） | 合规 | P0 | AI planning agent | 已处理 |
 | TODO-TASK-003 | 明确自动批改分题型准确率目标与人工复核触发条件 | 产品/质量 | P0 | 用户 | 未处理 |
 | TODO-TASK-004 | 明确视频离线缓存是否进入首版及对应加密策略 | 产品/安全 | P1 | 用户 | 未处理 |
 | TODO-TASK-005 | 明确微服务运维基线、TLS/密钥管理与服务契约回归策略 | 架构/运维 | P1 | AI planning agent | 未处理 |

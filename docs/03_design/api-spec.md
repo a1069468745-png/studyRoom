@@ -7,8 +7,8 @@
 | 项目 | studyRomm |
 | 阶段 | 方案设计阶段 |
 | 状态 | 草案 |
-| 版本 | v0.1 |
-| 最后更新 | 2026-04-27 |
+| 版本 | v0.2 |
+| 最后更新 | 2026-04-29 |
 | 相关来源 | `docs/03_design/architecture.md`、`docs/03_design/data-model.md`、`ai/specs.md`、用户阶段 3 答复 |
 
 ## 1. API 设计原则
@@ -29,10 +29,12 @@
 - `GET /api/common/dictionaries`
 - `GET /api/common/health`
 - `GET /api/common/tasks/{taskId}`
+- `POST /api/auth/logout`
 
 ### 2.2 客户端接口
 
 - `GET /api/client/knowledge/nodes`
+- `GET /api/client/knowledge/content-assets`
 - `GET /api/client/questions`
 - `POST /api/client/papers/rules`
 - `POST /api/client/papers/generate`
@@ -44,6 +46,8 @@
 ### 2.3 管理端接口
 
 - `POST /api/admin/knowledge/nodes`
+- `GET /api/admin/knowledge/content-assets`
+- `POST /api/admin/knowledge/content-assets`
 - `POST /api/admin/questions`
 - `POST /api/admin/questions/{questionId}/review`
 - `POST /api/admin/papers/templates`
@@ -227,6 +231,111 @@
 - 节点类型
 - 排序号
 - 父子关系
+
+### 4.8 当前身份摘要
+
+`GET /api/common/me`
+
+输出至少包含：
+
+- `actorType`
+- `actorId`
+- `username`
+- `displayName`
+- `serviceName`
+- `roleCodes`
+- `authorizationSummary`
+
+`authorizationSummary` 当前已落地字段：
+
+- `platformAdmin`
+- `classRoomIds`
+- `membershipRoles`
+- `teachingSubjectCodes`
+- `teachingAssignmentClassRoomIds`
+- `ownedResourceTypes`
+
+### 4.9 资源访问校验
+
+`GET /api/auth/access-check`
+
+请求参数：
+
+- `resourceType`
+- `resourceId`
+
+成功返回：
+
+- `resourceType`
+- `resourceId`
+- `allowed=true`
+
+失败返回：
+
+- `AUTH_FORBIDDEN`
+
+说明：
+
+- 当前用于 `DEV-003` 的资源归属校验与审计留痕基线验证。
+
+### 4.10 图文内容接口（DEV-004-B）
+
+`GET /api/admin/knowledge/content-assets`
+
+请求参数（可选）：
+
+- `curriculumNodeId`
+- `reviewStatus`
+- `publishStatus`
+
+输出：
+
+- 图文内容列表（`assetId`、`curriculumNodeId`、`assetType`、`title`、`bodyMarkdown`、`reviewStatus`、`publishStatus`）
+
+`POST /api/admin/knowledge/content-assets`
+
+输入：
+
+- `curriculumNodeId`
+- `assetType`
+- `title`
+- `bodyMarkdown`
+
+输出：
+
+- `assetId`
+- `reviewStatus`（默认 `DRAFT`）
+- `publishStatus`（默认 `UNPUBLISHED`）
+
+`GET /api/client/knowledge/content-assets`
+
+请求参数（可选）：
+
+- `curriculumNodeId`
+
+输出：
+
+- 仅返回 `reviewStatus=APPROVED` 且 `publishStatus=PUBLISHED` 的图文内容列表
+
+### 4.11 题目审核接口（DEV-004-D）
+
+`POST /api/admin/questions/{questionId}/review`
+
+输入：
+
+- `reviewStatus`（仅允许 `APPROVED` / `REJECTED`）
+- `reviewComment`（可选）
+
+输出：
+
+- `questionId`
+- `reviewStatus`
+
+约束：
+
+- 仅 `DRAFT` 状态题目可进入审核流转；
+- 非法状态流转返回 `BUSINESS_RULE_VIOLATION`；
+- 题目不存在返回 `RESOURCE_NOT_FOUND`。
 
 ## 5. 统一错误码
 

@@ -1,4 +1,4 @@
-# DEV-001 / DEV-002 Coding Notes
+# DEV-001 / DEV-003 Coding Notes
 
 ## 文档信息
 
@@ -7,8 +7,8 @@
 | 项目 | studyRomm |
 | 阶段 | 技术开发阶段 |
 | 状态 | 已更新 |
-| 版本 | v0.4 |
-| 最后更新 | 2026-04-28 |
+| 版本 | v0.5 |
+| 最后更新 | 2026-04-29 |
 | 负责人 | AI coding agent |
 | 相关文档 | docs/04_development/implementation-plan.md |
 
@@ -26,21 +26,30 @@
 - 补齐 `auth-service`、`knowledge-service` 的统一错误结构与未知路由测试。
 - 调整 `gateway` 测试方式，避免环境对 Netty 随机端口启动的影响。
 - 新建前端最小工作区：`web-client`、`admin-console`、`shared`、`mock`。
-- 在 `auth-service`、`knowledge-service` 中引入 Flyway、JDBC 与开发态 H2 数据源。
+- 在 `auth-service`、`knowledge-service` 中引入 Flyway、JDBC 与 MySQL 数据源接入配置（环境变量驱动）。
 - 新增首批核心主表迁移脚本，覆盖 `auth_service`、`knowledge_service`、`question_service`、`exam_service`、`job_service`。
 - 补齐建库回归测试，验证从空库初始化、唯一约束和核心关系插入。
+- 在 `security-common` 中落用户 Bearer 令牌校验、服务身份请求头校验、统一 401/403 返回和无状态安全链。
+- 在 `auth-service` 中新增登录入口、`/api/common/me` 当前身份接口与登录审计基线。
+- 在 `auth-service` 中补齐授权摘要查询与资源归属校验基线，当前覆盖管理员直通、直接 owner_user 归属、班级成员归属和教学授权归属。
+- 在 `auth-service` 中新增最小资源访问校验端点，并将资源访问成功/拒绝都写入 `audit_log`，形成 `DEV-003` 第三模块的审计留痕基线。
+- 在 `auth-service` 中补齐 `REVIEW/GRADING/PUBLISH/DELETE/EXPORT` 五类业务审计动作的统一落库基线，并新增 `logout` 审计动作。
 
 ## 关键实现说明
 
 - 按阶段规划，仅落 `DEV-001` 基座，不实现业务逻辑。
 - 健康接口统一为 `/api/common/health`。
 - 新增公共任务状态返回结构 `TaskStatusResponse` 与 `TaskStatus`，用于前端并行开发阶段对齐任务契约。
-- `security-common` 当前采用 `permitAll`，只作为后续权限能力的占位基座。
+- `security-common` 不再是纯 `permitAll` 占位；当前已切到无状态安全链，并支持 Bearer 令牌与服务身份请求头两条认证通道。
 - Servlet 服务侧 `traceId` 通过 `X-Trace-Id` 请求头透传或自动生成；Gateway 侧沿用响应头透传，并在任务基线接口中回传同一请求的 trace 值。
 - 前端工作区采用 `frontend/` 子目录和 npm workspaces 组织两个应用与两个共享包，满足 `DEV-001` 的工程壳层、路由骨架、API client 与 mock/stub 基座要求。
-- `DEV-002` 当前采用 H2 MySQL 模式作为测试态迁移载体，既保持 Maven 测试可本地执行，也不改变后续 MySQL 8 的目标落地口径。
+- `DEV-002` 与后续阶段统一采用 MySQL 接入口径，不再使用 H2 作为开发态或测试态数据库载体。
+- 当前数据库统一口径为 MariaDB（MySQL 协议兼容），不再使用 H2。
 - `auth-service` 迁移脚本落地 `user`、`role`、`user_role`、`class_room`、`class_membership`、`teaching_assignment`、`resource_owner_scope`、`audit_log`。
 - `knowledge-service` 迁移脚本落地 `textbook_version`、`curriculum_node`、`content_asset`、`question`、`question_option`、`question_answer`、`question_analysis`、`question_knowledge`、`question_curriculum_node`、`exam_plan`、`exam_plan_target`、`exam_session`、`exam_submission`、`job_task`。
+- `auth-service` 当前已提供 `POST /api/auth/login`、`GET /api/common/me`、服务身份校验和登录成功/失败审计记录，作为 `DEV-003` 第一模块的最小闭环。
+- `/api/common/me` 当前已补 `authorizationSummary`，供前端读取平台管理员标记、班级归属、成员角色、教学学科、教学授权班级和资源类型摘要。
+- 当前新增 `ResourceAccessService`，用于后续业务服务复用资源归属校验，不把权限逻辑散落到控制器。
 
 ## 当前环境与验证结论
 
@@ -51,7 +60,11 @@
 - 前端工作区依赖安装、`vite build`、`vitest` 与开发服务器冒烟验证已完成。
 - 当前 `frontend/packages/shared/tsconfig.json` 中存在本地 `ignoreDeprecations: "6.0"` 配置，导致 `npm run typecheck --workspaces --if-present` 失败；该问题不影响 `DEV-001` 的构建、测试与运行验证，但需要在前端后续回归中修复。
 - `DEV-002` 已完成首轮落地：Flyway 迁移脚本在测试中可自动执行，首批核心表可从空库初始化完成。
-- 当前 Flyway 在测试输出中会提示 H2 `2.2.224` 高于官方验证版本；该提示不影响迁移执行结果，但后续升级 Flyway 时应一并回归。
+- 当前验证与联调以 MySQL 为准；Flyway 的数据库兼容性回归基线也以 MySQL 版本为准。
+- `DEV-003` 第一模块已完成：认证入口、当前身份查询、服务身份校验与登录审计测试通过。
+- `DEV-003` 第二模块已完成：授权摘要查询与资源归属校验基线测试通过。
+- `DEV-003` 第三模块已完成首轮最小闭环：资源访问校验成功/拒绝都会落审计，相关接口与测试已通过。
+- `DEV-003` 第三模块已完成完整基线：登录、登出、资源访问检查、审核、批改、发布、删除、导出动作均已具备统一审计落库路径，并通过测试。
 
 ## 本次验证证据
 
@@ -84,3 +97,91 @@
 | TODO-CODE-002 | 在 DEV-002 中引入 Flyway 与数据库连接配置 | 技术 | P0 | AI coding agent | 已处理 |
 | TODO-CODE-003 | 修复当前 Node / npm 运行时 `ncrypto::CSPRNG(nullptr, 0)` 异常，恢复前端依赖安装与测试能力 | 技术 | P0 | AI coding agent | 已处理 |
 | TODO-CODE-004 | 修复 `frontend/packages/shared/tsconfig.json` 的本地 `ignoreDeprecations` 配置，并补齐前端 `typecheck` 证据 | 测试 | P0 | AI coding agent | 部分处理 |
+| TODO-CODE-005 | 将本机临时 `root/123456` 切换为专用应用账号（建议 `studyromm_app`）并完成最小权限收口 | 安全 | P0 | AI coding agent | 待处理 |
+
+## DEV-004-A 实施记录（课程树与教材版本接口）
+
+- 新增接口：
+  - `GET /api/common/dictionaries`
+  - `GET /api/common/dictionaries/textbook-versions`
+  - `GET /api/common/dictionaries/curriculum-nodes`
+- 新增查询服务：`KnowledgeDictionaryQueryService`，按 `textbookVersionId/subjectCode/nodeType/parentNodeId` 过滤课程树节点，按 `sortOrder` 稳定排序。
+- 新增返回模型：`TextbookVersionDictionaryItem`、`CurriculumNodeDictionaryItem`。
+- 保留 `GET /api/knowledge/bootstrap` 作为服务引导检查接口。
+
+本轮验证证据：
+
+- 执行命令：`cmd /c "set JAVA_HOME=D:\java21&& set PATH=D:\java21\bin;%PATH%&& D:\soft\apache-maven-3.6.3\bin\mvn.cmd test -f backend\pom.xml -pl services/knowledge-service -am"`
+- 结果：`knowledge-service` 测试通过（`Tests run: 7, Failures: 0, Errors: 0`）。
+- 新增通过测试：
+  - 字典接口返回教材版本过滤结果。
+  - 课程树子节点按 `sort_order` 返回并保持父子关系筛选。
+  - `GET /api/common/dictionaries` 返回课程节点类型与教材版本字典。
+
+## DEV-004-B 实施记录（知识点图文内容接口）
+
+- 新增接口：
+  - `GET /api/admin/knowledge/content-assets`
+  - `POST /api/admin/knowledge/content-assets`
+  - `GET /api/client/knowledge/content-assets`
+- 新增服务：`KnowledgeContentAssetService`
+  - 管理端支持按 `curriculumNodeId/reviewStatus/publishStatus` 查询图文内容；
+  - 管理端新增图文内容时默认落 `reviewStatus=DRAFT`、`publishStatus=UNPUBLISHED`；
+  - 客户端仅返回 `APPROVED + PUBLISHED` 的图文内容。
+- 新增模型：`ContentAssetItem`、`CreateContentAssetRequest`、`CreateContentAssetResponse`。
+
+本轮验证证据：
+
+- 执行命令：`cmd /c "set JAVA_HOME=D:\java21&& set PATH=D:\java21\bin;%PATH%&& D:\soft\apache-maven-3.6.3\bin\mvn.cmd test -f backend\pom.xml -pl services/knowledge-service -am"`
+- 数据源：`knowledge_service`（MariaDB，本地 `root/123456`）
+- 结果：`knowledge-service` 测试通过（`Tests run: 8, Failures: 0, Errors: 0`）。
+- 新增通过测试：
+  - 管理端新增图文内容草稿并返回默认状态；
+  - 管理端图文内容列表查询；
+  - 客户端仅返回已发布图文内容。
+
+## DEV-004-C 实施记录（题库录入与管理查询接口）
+
+- 新增接口：
+  - `GET /api/admin/questions`
+  - `POST /api/admin/questions`
+- 新增服务：`QuestionBankService`
+  - 管理端支持按 `subjectCode/reviewStatus` 查询题目；
+  - 题目录入时同步写入 `question`、`question_answer`、`question_analysis`；
+  - 题目录入时要求至少绑定 1 个知识点，落 `question_knowledge`；
+  - 支持可选课程树冗余绑定，落 `question_curriculum_node`。
+- 新增模型：`CreateQuestionRequest`、`CreateQuestionResponse`、`QuestionItem`。
+- 新增异常映射：`KnowledgeExceptionHandler`，将参数校验异常统一映射为 `400 VALIDATION_FAILED`。
+
+本轮验证证据：
+
+- 执行命令：`cmd /c "set JAVA_HOME=D:\java21&& set PATH=D:\java21\bin;%PATH%&& set STUDYROMM_KNOWLEDGE_DB_USERNAME=root&& set STUDYROMM_KNOWLEDGE_DB_PASSWORD=123456&& D:\soft\apache-maven-3.6.3\bin\mvn.cmd test -f backend\pom.xml -pl services/knowledge-service -am"`
+- 数据源：`knowledge_service`（MariaDB，本地 `root/123456`）
+- 结果：`knowledge-service` 测试通过（`Tests run: 10, Failures: 0, Errors: 0`）。
+- 新增通过测试：
+  - 管理端题目录入成功并返回 `DRAFT`；
+  - 管理端按学科/审核状态查询题目列表；
+  - 缺失知识点绑定时返回 `400 VALIDATION_FAILED`。
+
+## DEV-004-D 实施记录（题目审核入口与状态流转）
+
+- 新增接口：
+  - `POST /api/admin/questions/{questionId}/review`
+- `QuestionBankService` 新增审核流转：
+  - 仅允许 `reviewStatus=APPROVED/REJECTED`；
+  - 仅允许 `DRAFT -> APPROVED/REJECTED`；
+  - 非 `DRAFT` 状态禁止再次审核。
+- 新增响应模型：`ReviewQuestionRequest`、`ReviewQuestionResponse`。
+- 异常收口：
+  - 非法流转返回 `BUSINESS_RULE_VIOLATION`（400）；
+  - 题目不存在返回 `RESOURCE_NOT_FOUND`（404）。
+
+本轮验证证据：
+
+- 执行命令：`cmd /c "set JAVA_HOME=D:\java21&& set PATH=D:\java21\bin;%PATH%&& set STUDYROMM_KNOWLEDGE_DB_USERNAME=root&& set STUDYROMM_KNOWLEDGE_DB_PASSWORD=123456&& D:\soft\apache-maven-3.6.3\bin\mvn.cmd test -f backend\pom.xml -pl services/knowledge-service -am"`
+- 数据源：`knowledge_service`（MariaDB，本地 `root/123456`）
+- 结果：`knowledge-service` 测试通过（`Tests run: 13, Failures: 0, Errors: 0`）。
+- 新增通过测试：
+  - `DRAFT` 题目审核通过；
+  - 非 `DRAFT` 题目审核被拒绝；
+  - 不存在题目返回 `404 RESOURCE_NOT_FOUND`。

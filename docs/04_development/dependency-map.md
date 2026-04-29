@@ -35,8 +35,8 @@
 | 服务 | 主要职责 | 关键依赖 |
 |---|---|---|
 | gateway | 统一入口、路由、前置鉴权 | auth-service |
-| auth-service | 认证、角色、授权、资源归属基础 | MySQL、公共模块 |
-| knowledge-service | 教材版本、课程树、知识点、图文内容 | auth-service、MySQL |
+| auth-service | 认证、角色、授权、资源归属基础 | MariaDB、公共模块 |
+| knowledge-service | 教材版本、课程树、知识点、图文内容 | auth-service、MariaDB |
 | question-service | 题目、答案、解析、审核 | knowledge-service、auth-service |
 | paper-service | 模板治理、范围解析、组卷任务 | question-service、job-service |
 | exam-service | 考试计划、考试实例、提交 | paper-service、auth-service |
@@ -73,7 +73,7 @@
 
 | 外部依赖 | 用途 | 是否阻塞首批规划 | 备注 |
 |---|---|---|---|
-| MySQL 8 | 业务数据存储 | 否 | DEV-002 前必须明确 |
+| MariaDB（MySQL 协议兼容） | 业务数据存储 | 否 | DEV-002 前必须明确 |
 | Redis | 缓存与幂等 | 否 | 可在后续阶段逐步引入 |
 | MinIO | 文件和视频对象 | 否 | 视频闭环前需明确 |
 | Nacos | 注册与配置 | 否 | 开发态可临时替代 |
