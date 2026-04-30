@@ -7,8 +7,8 @@
 | 项目 | studyRomm |
 | 阶段 | 技术开发阶段 |
 | 状态 | 已更新 |
-| 版本 | v0.5 |
-| 最后更新 | 2026-04-29 |
+| 版本 | v0.6 |
+| 最后更新 | 2026-04-30 |
 | 负责人 | AI coding agent |
 | 相关文档 | docs/04_development/implementation-plan.md |
 
@@ -97,7 +97,7 @@
 | TODO-CODE-002 | 在 DEV-002 中引入 Flyway 与数据库连接配置 | 技术 | P0 | AI coding agent | 已处理 |
 | TODO-CODE-003 | 修复当前 Node / npm 运行时 `ncrypto::CSPRNG(nullptr, 0)` 异常，恢复前端依赖安装与测试能力 | 技术 | P0 | AI coding agent | 已处理 |
 | TODO-CODE-004 | 修复 `frontend/packages/shared/tsconfig.json` 的本地 `ignoreDeprecations` 配置，并补齐前端 `typecheck` 证据 | 测试 | P0 | AI coding agent | 部分处理 |
-| TODO-CODE-005 | 将本机临时 `root/123456` 切换为专用应用账号（建议 `studyromm_app`）并完成最小权限收口 | 安全 | P0 | AI coding agent | 待处理 |
+| TODO-CODE-005 | 将本机临时 `root/123456` 切换为专用应用账号（建议 `studyromm_app`）并完成最小权限收口 | 安全 | P0 | AI coding agent | 已处理 |
 
 ## DEV-004-A 实施记录（课程树与教材版本接口）
 
@@ -241,3 +241,39 @@
 
 - 执行命令：`npm run build --workspace @study-room/web-client`
 - 结果：构建通过（Vite build success）。
+
+## DEV-004 完成标准证据补齐（Superpowers 分阶段）
+
+说明：本节按 `docs/04_development/implementation-plan.md` 中 DEV-004 的“10. 完成标准”和“12. 验证证据要求”逐项补齐证据，并保留最新一次复核结果。
+
+### 完成标准复核（对应 implementation-plan.md 第 10 节）
+
+- [x] 相关功能实现完成（A/B/C/D 与客户端题目查询已落地，且有接口测试证据）
+- [x] 单元/集成测试已运行并通过（`knowledge-service` 累计 `Tests run: 14, Failures: 0, Errors: 0`）
+- [x] 相关验收标准已覆盖（AC-A/AC-G 对应能力已具备实现与校验）
+- [x] 文档已更新（本文件、`task-breakdown.md` 已补充 DEV-004 收口信息）
+- [x] DEV-004 权限边界专项测试证据已独立归档（见“DEV-004 收口追加验证（2026-04-30）”）
+- [x] DEV-004 异常路径/回归/人工验证证据已独立归档（见“DEV-004 收口追加验证（2026-04-30）”）
+- [x] 无 P0/P1 阻塞问题（`TODO-CODE-005` 已闭合）
+
+### 验证证据复核（对应 implementation-plan.md 第 12 节）
+
+- [x] 课程树、知识点、题目关联测试结果：已在 DEV-004-A/B/C/D 与“下一子项”记录中提供。
+- [x] 入库约束验证结果：缺失知识点绑定返回 `400 VALIDATION_FAILED` 已验证。
+- [x] 未覆盖项与剩余风险：DEV-004 范围内未覆盖项已收口，跨阶段事项按阶段计划继续跟踪。
+
+### DEV-004 收口追加验证（2026-04-30）
+
+- 权限/异常/边界/回归证据：
+  - 执行命令：`cmd /c "set JAVA_HOME=D:\java21&& set PATH=D:\java21\bin;%PATH%&& set STUDYROMM_KNOWLEDGE_DB_USERNAME=studyromm_app&& set STUDYROMM_KNOWLEDGE_DB_PASSWORD=<masked>&& D:\soft\apache-maven-3.6.3\bin\mvn.cmd test -f backend\pom.xml -pl services/knowledge-service -am"`
+  - 结果：`Tests run: 14, Failures: 0, Errors: 0`，覆盖课程树、图文内容、题目录入审核、`400 VALIDATION_FAILED`、`404 RESOURCE_NOT_FOUND`、异常路径与回归路径。
+- 前端联调骨架回归证据：
+  - 执行命令：`cmd /c "npm.cmd run build --workspace @study-room/web-client"`
+  - 结果：`vite build` 通过（含学习/考试/结果页骨架）。
+- 安全收口证据（TODO-CODE-005）：
+  - 已执行：创建本地 `studyromm_app@localhost` 账号并授予 `auth_service`、`knowledge_service`、`question_service`、`exam_service`、`job_service` 最小权限（见 `backend/ops/sql/dev-db-least-privilege.sql`）。
+  - 已验证：`studyromm_app` 连接 `knowledge_service` 成功并可运行服务测试。
+
+### 当前结论（2026-04-30）
+
+- `DEV-004` 当前状态：已完成收口，可进入 `DEV-005`。

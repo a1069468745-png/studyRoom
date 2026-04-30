@@ -4,8 +4,8 @@ spring:
   datasource:
     url: ${STUDYROMM_AUTH_DB_URL:jdbc:mariadb://localhost:3306/auth_service?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
     driver-class-name: org.mariadb.jdbc.Driver
-    username: ${STUDYROMM_AUTH_DB_USERNAME:root}
-    password: ${STUDYROMM_AUTH_DB_PASSWORD:123456}
+    username: ${STUDYROMM_AUTH_DB_USERNAME:studyromm_app}
+    password: ${STUDYROMM_AUTH_DB_PASSWORD:change-me}
   flyway:
     enabled: true
     default-schema: auth_service

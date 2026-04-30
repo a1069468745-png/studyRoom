@@ -7,15 +7,15 @@
 | 项目 | studyRomm |
 | 阶段 | 技术开发阶段 |
 | 状态 | 已更新 |
-| 版本 | v0.5 |
-| 最后更新 | 2026-04-29 |
+| 版本 | v0.6 |
+| 最后更新 | 2026-04-30 |
 | 相关来源 | `AGENTS.md`、`ai/rules.md`、`ai/superpowers.md`、`ai/question-bank.md`、`ai/stage-gates.md`、`ai/templates.md`、`ai/specs.md`、`ai/decisions.md`、`docs/02_product/*.md`、`docs/03_design/*.md`、`docs/04_development/*.md` |
 
 ## 当前理解
 
 当前项目是一个面向学生、老师和管理员的内部知识库与考试系统，目标是覆盖教材版本下的课程树、题库、组卷、考试、批改、分析和视频解析最小闭环。
 
-当前处于阶段 4：技术开发阶段。阶段 4 的执行口径已调整为前后端并行，不再采用“后端全部完成后再统一做前端联调”的串行方式。当前已完成 `DEV-001`、`DEV-002`、`DEV-003` 的基线实现与验证，并已进入 `DEV-004`，完成 `DEV-004-A`（课程树与教材版本接口）。
+当前处于阶段 4：技术开发阶段。阶段 4 的执行口径已调整为前后端并行，不再采用“后端全部完成后再统一做前端联调”的串行方式。当前已完成 `DEV-001`、`DEV-002`、`DEV-003`、`DEV-004` 的基线实现与验证；`DEV-004` 已完成收口，进入 `DEV-005` 准备阶段。
 
 ## 已确认事实
 
@@ -44,7 +44,7 @@
 - 当前应以 `docs/04_development/implementation-plan.md` 作为阶段 4 权威口径。
 - 当前阶段 4 的执行方式已收敛为“后端泳道 + 前端泳道 + 契约治理泳道”并行推进。
 - 仓库中即使已存在 `backend/` 目录或早期实现，也只代表“已有实现现状”，不自动代表阶段门禁结论。
-- `DEV-001`、`DEV-002`、`DEV-003` 已完成当前轮次收口验证；`DEV-004` 已开始并完成 `DEV-004-A`。
+- `DEV-001`、`DEV-002`、`DEV-003`、`DEV-004` 已完成当前轮次收口验证。
 
 ## 待确认事项
 
@@ -76,7 +76,11 @@
 - `DEV-002` 的首批核心表范围已收敛为“首批核心主表 + Flyway 基座”，对应决策见 D-040。
 - `DEV-002` 已在 `auth-service`、`knowledge-service` 中引入 Flyway、JDBC 与 MySQL/MariaDB 接入配置，并新增 `V1` 基线迁移脚本。
 - 数据库执行口径已统一为 MariaDB（MySQL 协议兼容）；开发、联调、测试与迁移验证不再使用 H2。
-- 本机当前可使用 `root/123456` 跑通 MariaDB，后续安全收口需切换为专用应用账号（建议 `studyromm_app`）并收敛权限。
+- 本机 MariaDB 已完成从临时 `root/123456` 到 `studyromm_app` 的最小权限收口，后续按应用账号运行与验证。
 - `DEV-002` 当前已验证 `auth_service`、`knowledge_service`、`question_service`、`exam_service`、`job_service` 五组 schema / table 初始化与基础约束可通过后端聚合测试。
 - 当前 `frontend/packages/shared/tsconfig.json` 存在本地 `ignoreDeprecations` 配置，导致 `typecheck` 失败；该问题不阻塞 `DEV-002` 的数据建模与建库准入，但应在前端后续回归中修复。
 - `DEV-004-A` 已落地 `GET /api/common/dictionaries`、`GET /api/common/dictionaries/textbook-versions`、`GET /api/common/dictionaries/curriculum-nodes`，并通过 `knowledge-service` 集成测试。
+- `DEV-004-B` 已落地图文内容管理与客户端图文查询接口，并通过集成测试。
+- `DEV-004-C` 已落地题目录入与管理查询接口，包含“至少关联 1 个知识点”校验，并通过集成测试。
+- `DEV-004-D` 已落地题目审核状态流转接口，并通过集成测试。
+- `DEV-004` 下一子项“客户端题目查询”已落地并通过集成测试。
