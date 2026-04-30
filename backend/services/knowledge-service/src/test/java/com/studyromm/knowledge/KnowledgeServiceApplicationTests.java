@@ -345,6 +345,38 @@ class KnowledgeServiceApplicationTests {
     }
 
     @Test
+    void clientQuestionsOnlyReturnsApprovedQuestions() throws Exception {
+        String suffix = UUID.randomUUID().toString().replace("-", "");
+        String approvedId = "question-client-approved-" + suffix;
+        String draftId = "question-client-draft-" + suffix;
+
+        jdbcTemplate.update(
+                """
+                        insert into question_service.question
+                        (id, question_type, difficulty_level, source_type, review_status, stem_markdown, grade_code, subject_code)
+                        values (?, ?, ?, ?, ?, ?, ?, ?)
+                        """,
+                approvedId, "CHOICE", "EASY", "KNOWLEDGE_BASE", "APPROVED", "approved question", "GRADE_9", "MATH"
+        );
+        jdbcTemplate.update(
+                """
+                        insert into question_service.question
+                        (id, question_type, difficulty_level, source_type, review_status, stem_markdown, grade_code, subject_code)
+                        values (?, ?, ?, ?, ?, ?, ?, ?)
+                        """,
+                draftId, "CHOICE", "EASY", "KNOWLEDGE_BASE", "DRAFT", "draft question", "GRADE_9", "MATH"
+        );
+
+        mockMvc.perform(get("/api/client/questions")
+                        .param("subjectCode", "MATH")
+                        .param("gradeCode", "GRADE_9")
+                        .param("questionType", "CHOICE"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[?(@.questionId=='" + approvedId + "')]").isNotEmpty())
+                .andExpect(jsonPath("$[?(@.questionId=='" + draftId + "')]").isEmpty());
+    }
+
+    @Test
     void flywayCreatesFirstWaveSchemasAndTables() {
         Integer tableCount = jdbcTemplate.queryForObject(
                 """

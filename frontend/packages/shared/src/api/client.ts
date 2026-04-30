@@ -8,6 +8,7 @@ import axios, {
 import type { TaskSnapshot, TaskSubmission } from "../types/task";
 import { createApiError, isApiErrorPayload, type ApiClientError } from "../types/error";
 import type { CurrentUserProfile } from "../types/user";
+import type { ClientQuestionItem, ContentAssetItem, CurriculumNodeDictionaryItem } from "../types/learning";
 
 export interface ApiClientOptions {
   baseURL: string;
@@ -81,6 +82,39 @@ export class StudyRoomApiClient {
       data: payload
     });
   }
+
+  getCurriculumNodes(params: {
+    textbookVersionId?: string;
+    subjectCode?: string;
+    nodeType?: string;
+    parentNodeId?: string;
+  }): Promise<CurriculumNodeDictionaryItem[]> {
+    return this.request({
+      method: "GET",
+      url: "/api/common/dictionaries/curriculum-nodes",
+      params
+    });
+  }
+
+  getClientContentAssets(params: { curriculumNodeId?: string }): Promise<ContentAssetItem[]> {
+    return this.request({
+      method: "GET",
+      url: "/api/client/knowledge/content-assets",
+      params
+    });
+  }
+
+  getClientQuestions(params: {
+    subjectCode?: string;
+    gradeCode?: string;
+    questionType?: string;
+  }): Promise<ClientQuestionItem[]> {
+    return this.request({
+      method: "GET",
+      url: "/api/client/questions",
+      params
+    });
+  }
 }
 
 export function createApiClient(options: ApiClientOptions): StudyRoomApiClient {
@@ -119,4 +153,3 @@ export function normalizeApiError(error: unknown): ApiClientError {
     traceId: "trace-unavailable"
   });
 }
-

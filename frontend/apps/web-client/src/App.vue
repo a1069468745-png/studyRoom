@@ -10,11 +10,13 @@ const pageTitle = computed(() => route.meta.title ?? "Web Client");
   <el-container class="shell">
     <el-header class="shell__header">
       <div>
-        <p class="shell__eyebrow">DEV-001 Frontend Workspace</p>
+        <p class="shell__eyebrow">DEV-004 / TASK-022</p>
         <h1>{{ pageTitle }}</h1>
       </div>
       <nav class="shell__nav">
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/client/learning">学习</RouterLink>
+        <RouterLink to="/client/exam">考试</RouterLink>
+        <RouterLink to="/client/result">结果</RouterLink>
       </nav>
     </el-header>
     <el-main class="shell__main">
@@ -26,9 +28,7 @@ const pageTitle = computed(() => route.meta.title ?? "Web Client");
 <style scoped>
 .shell {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(64, 158, 255, 0.18), transparent 34%),
-    linear-gradient(180deg, #f5f9ff 0%, #f9fbfd 100%);
+  background: #f5f7fa;
 }
 
 .shell__header {
@@ -53,6 +53,7 @@ const pageTitle = computed(() => route.meta.title ?? "Web Client");
 }
 
 .shell__nav a {
+  margin-left: 16px;
   color: #1f2d3d;
   font-weight: 600;
   text-decoration: none;
@@ -62,4 +63,3 @@ const pageTitle = computed(() => route.meta.title ?? "Web Client");
   padding: 0 32px 32px;
 }
 </style>
-

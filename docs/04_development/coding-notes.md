@@ -185,3 +185,59 @@
   - `DRAFT` 题目审核通过；
   - 非 `DRAFT` 题目审核被拒绝；
   - 不存在题目返回 `404 RESOURCE_NOT_FOUND`。
+
+## DEV-004 下一子项实施记录（客户端题目查询）
+
+- 新增接口：
+  - `GET /api/client/questions`
+- 新增返回模型：`ClientQuestionItem`。
+- `QuestionBankService` 新增客户端查询能力：
+  - 仅返回 `reviewStatus=APPROVED` 题目；
+  - 支持 `subjectCode/gradeCode/questionType` 过滤；
+  - 按 `created_at desc, id desc` 返回。
+
+本轮验证证据：
+
+- 执行命令：`cmd /c "set JAVA_HOME=D:\java21&& set PATH=D:\java21\bin;%PATH%&& set STUDYROMM_KNOWLEDGE_DB_USERNAME=root&& set STUDYROMM_KNOWLEDGE_DB_PASSWORD=123456&& D:\soft\apache-maven-3.6.3\bin\mvn.cmd test -f backend\pom.xml -pl services/knowledge-service -am"`
+- 数据源：`knowledge_service`（MariaDB，本地 `root/123456`）
+- 结果：`knowledge-service` 测试通过（`Tests run: 14, Failures: 0, Errors: 0`）。
+- 新增通过测试：
+  - 客户端仅能查询到 `APPROVED` 题目，`DRAFT` 不可见。
+
+## TASK-022 实施记录（学生端学习链路前端骨架联调）
+
+- `web-client` 新增学习链路页面骨架：`/client/learning`。
+- 页面采用“三栏联动”：
+  - 左栏课程树（`GET /api/common/dictionaries/curriculum-nodes`）；
+  - 中栏图文内容（`GET /api/client/knowledge/content-assets`）；
+  - 右栏客户端题目列表（`GET /api/client/questions`）。
+- 顶部筛选统一维护 `textbookVersionId/subjectCode/gradeCode/questionType/nodeId`，并同步到 URL query，支持刷新回放。
+- 扩展共享 API client：
+  - `getCurriculumNodes`
+  - `getClientContentAssets`
+  - `getClientQuestions`
+- 新增共享类型：`CurriculumNodeDictionaryItem`、`ContentAssetItem`、`ClientQuestionItem`。
+- 新增 mock 学习数据 `learningFixtures`，支持 `VITE_USE_MOCK=true` 的本地骨架联调。
+
+本轮验证证据：
+
+- 执行命令：`npm run build --workspace @study-room/web-client`
+- 结果：构建通过（Vite build success）。
+- 运行命令：`npm run dev:web-client`（后台）
+- 结果：`5173` 端口监听成功，可进行本地联调访问。
+
+## TASK-022 下一步实施记录（考试页与结果页骨架联调）
+
+- `/client/exam` 从占位页升级为可操作骨架：
+  - 考试提交表单（examId/clientId/answerPayload）
+  - 提交任务状态面板（基于共享 task store + mock 任务）
+- `/client/result` 从占位页升级为结果骨架：
+  - 考试/学生上下文输入
+  - 成绩与解析摘要面板（mock 数据）
+- 路由更新：
+  - `/client/learning`、`/client/exam`、`/client/result` 三页可导航联调。
+
+本轮验证证据：
+
+- 执行命令：`npm run build --workspace @study-room/web-client`
+- 结果：构建通过（Vite build success）。

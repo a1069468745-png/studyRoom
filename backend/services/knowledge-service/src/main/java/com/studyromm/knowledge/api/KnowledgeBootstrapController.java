@@ -99,6 +99,15 @@ public class KnowledgeBootstrapController {
         return questionBankService.createQuestion(request);
     }
 
+    @GetMapping("/api/client/questions")
+    public List<ClientQuestionItem> clientQuestions(
+            @RequestParam(required = false) String subjectCode,
+            @RequestParam(required = false) String gradeCode,
+            @RequestParam(required = false) String questionType
+    ) {
+        return questionBankService.listClientQuestions(subjectCode, gradeCode, questionType);
+    }
+
     @PostMapping("/api/admin/questions/{questionId}/review")
     public ReviewQuestionResponse reviewQuestion(
             @PathVariable String questionId,

@@ -337,6 +337,25 @@
 - 非法状态流转返回 `BUSINESS_RULE_VIOLATION`；
 - 题目不存在返回 `RESOURCE_NOT_FOUND`。
 
+### 4.12 客户端题目查询接口（DEV-004 下一子项）
+
+`GET /api/client/questions`
+
+请求参数（可选）：
+
+- `subjectCode`
+- `gradeCode`
+- `questionType`
+
+输出：
+
+- 题目列表（`questionId`、`questionType`、`difficultyLevel`、`stemMarkdown`、`gradeCode`、`subjectCode`）
+
+约束：
+
+- 仅返回 `reviewStatus=APPROVED` 且未删除题目；
+- 支持按学科、年级、题型过滤。
+
 ## 5. 统一错误码
 
 - `AUTH_UNAUTHORIZED`

@@ -2,6 +2,7 @@ package com.studyromm.knowledge.application;
 
 import com.studyromm.knowledge.api.CreateQuestionRequest;
 import com.studyromm.knowledge.api.CreateQuestionResponse;
+import com.studyromm.knowledge.api.ClientQuestionItem;
 import com.studyromm.knowledge.api.QuestionItem;
 import com.studyromm.knowledge.api.ReviewQuestionRequest;
 import com.studyromm.knowledge.api.ReviewQuestionResponse;
@@ -48,6 +49,39 @@ public class QuestionBankService {
                 rs.getString("difficulty_level"),
                 rs.getString("source_type"),
                 rs.getString("review_status"),
+                rs.getString("stem_markdown"),
+                rs.getString("grade_code"),
+                rs.getString("subject_code")
+        ));
+    }
+
+    public List<ClientQuestionItem> listClientQuestions(String subjectCode, String gradeCode, String questionType) {
+        StringBuilder sql = new StringBuilder(
+                """
+                        select id, question_type, difficulty_level, stem_markdown, grade_code, subject_code
+                        from question_service.question
+                        where is_deleted = false
+                          and review_status = 'APPROVED'
+                        """
+        );
+        Map<String, Object> params = new java.util.HashMap<>();
+        if (!isBlank(subjectCode)) {
+            sql.append(" and subject_code = :subjectCode");
+            params.put("subjectCode", subjectCode);
+        }
+        if (!isBlank(gradeCode)) {
+            sql.append(" and grade_code = :gradeCode");
+            params.put("gradeCode", gradeCode);
+        }
+        if (!isBlank(questionType)) {
+            sql.append(" and question_type = :questionType");
+            params.put("questionType", questionType);
+        }
+        sql.append(" order by created_at desc, id desc");
+        return jdbcTemplate.query(sql.toString(), params, (rs, rowNum) -> new ClientQuestionItem(
+                rs.getString("id"),
+                rs.getString("question_type"),
+                rs.getString("difficulty_level"),
                 rs.getString("stem_markdown"),
                 rs.getString("grade_code"),
                 rs.getString("subject_code")
